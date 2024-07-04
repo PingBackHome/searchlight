@@ -1,4 +1,4 @@
-*How to install and configure PostgresSQL*
+# *How to install and configure PostgresSQL*
 
 
 __UPDATE APT & INSTALL POSTGRESQL__
