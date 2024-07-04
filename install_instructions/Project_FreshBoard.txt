@@ -1,0 +1,80 @@
+docker contaier
+- metabase
+- postgress
+
+
+Projectnaam: Searchlight
+DB admin:	it2pharaoh
+db pass:	test_1
+
+
+**Postgress database schema**
+
+-- SQL schema for Klanten and Software tables
+
+-- Create Klanten table
+CREATE TABLE Klanten (
+    klant_id SERIAL PRIMARY KEY,
+    naam_bedrijf VARCHAR(255) NOT NULL,
+    locatie_bedrijf VARCHAR(255),
+    contact_persoon VARCHAR(255),
+    functie VARCHAR(255),
+    email VARCHAR(255) UNIQUE,
+    telefoonnummer VARCHAR(15)
+);
+
+-- Create Software table
+CREATE TABLE Software (
+    software_id SERIAL PRIMARY KEY,
+    product_naam VARCHAR(255) NOT NULL,
+    software_naam VARCHAR(255) NOT NULL,
+    software_versie VARCHAR(50),
+    release_date DATE,
+    ipv4_address INET,
+    hostname VARCHAR(255),
+    change_password DATE,
+    licentie_verloop DATE,
+    klant_id INTEGER REFERENCES Klanten(klant_id) ON DELETE SET NULL
+);
+
+
+
+
+** How to install and configure PostgresSQL **
+
+
+
+
+
+sudo apt update && sudo apt install postgresql
+
+sudo -i -u postgres
+psql -U postgres
+
+create user <username_admin> with password <''>;
+alter role <username_admin> superuser;
+
+sudo nano /etc/postgresql/14/main/postgresql.conf
+EDIT=> 
+        JUMP TO LINE:'listen_addresses'
+        CHANGE:'local' -> '*'
+
+sudo nano /etc/postgresql/14/main/pg_hba.conf
+ADD=>   
+        TO LINE CONTAINS: # 'local' is for Unix..
+        ADD NEWLINE: local <db_name> <username_admin> md5
+        TO LINE CONTAINS: # IPv4 local..
+        ADD NEWLINE: host <db_name> <username_admin> md5
+        TO LINE UNDER: # IPv6 local
+        ADD NEWLINE: host <db_name> <username_admin> 172.18.0.1/16 md5
+
+sudo systemctl restart postgresql
+
+psql -U <username_admin> -d <db_name> 
+
+
+
+
+
+
+
